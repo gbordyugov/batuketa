@@ -1,13 +1,12 @@
 import tensorflow as tf
 from numpy import arange
+from numpy import zeros
 from numpy.random import choice
 from numpy.random import random
-from numpy.random import zeros
 from tensorflow.data import Dataset  # pylint: disable=E0401
 
 from batuketa.constants import input_key
 from batuketa.constants import mask_key
-from batuketa.constants import target_key
 
 
 def get_dataset(n_samples: int, sample_length: int) -> Dataset:
@@ -17,7 +16,9 @@ def get_dataset(n_samples: int, sample_length: int) -> Dataset:
         for _ in range(n_samples):
             input = random(sample_length)
             non_zeros = choice(indices, 2, replace=False)
+
             sum = input[non_zeros].sum()
+
             mask = zeros(sample_length)
             mask[non_zeros] += 1.0
 
@@ -30,7 +31,7 @@ def get_dataset(n_samples: int, sample_length: int) -> Dataset:
             )
 
     return Dataset.from_generator(
-        generator=lambda: generator,
+        generator=generator,
         output_signature=(
             {
                 input_key: tf.TensorSpec(
