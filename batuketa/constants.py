@@ -1,3 +1,3 @@
-x_key = 'x'
+input_key = 'input'
 mask_key = 'mask'
-sum_key = 'sum'
+target_key = 'target'
