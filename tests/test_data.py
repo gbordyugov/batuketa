@@ -5,7 +5,7 @@ from batuketa.constants import mask_key
 from batuketa.data import get_dataset
 
 
-def test_dataset():
+def test_get_dataset():
     n_samples = 1000
     sample_length = 400
 
