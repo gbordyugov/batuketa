@@ -16,7 +16,8 @@ been created by poetry (which typicall happens on a first run of
 `poetry install`), any command prefixed by "poetry run" will be
 automagically executed in this virtual environment.
 
-Those steps are needed to build and install the package:
+Those steps are needed to build and install the package, and to run a
+sample training/evalution script:
 
 1. Clone repository and `cd` into it.
 1. Make sure you've got the latest version of the `poetry` tool
