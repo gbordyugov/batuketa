@@ -5,4 +5,4 @@ set -e
 
 poetry run black --diff --check .
 poetry run isort --check .
-poetry run pylint -E batuketa tests
+poetry run pylint -E batuketa tests scripts
