@@ -19,8 +19,9 @@ automagically executed in this virtual environment.
 Those steps are needed to build and install the package:
 
 1. Clone repository and `cd` into it.
-1. Make sure you've got `poetry` tool available in your Python
-   installation, otherwise install it by issuing `pip install poetry`.
+1. Make sure you've got the latest version of the `poetry` tool
+   available in your Python installation, otherwise install it by
+   issuing `pip install --upgrade poetry`.
 1. Install the project as a Python module along with its dependencies
    by issuing `poetry install` (make sure you're in the directory with
    the cloned git repository of the project).
