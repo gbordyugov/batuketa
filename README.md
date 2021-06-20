@@ -5,8 +5,8 @@
 
 ## Installing and running the code
 
-This project is to be built with Python 3.7 or 3.8. The models are
-neural networks coded in Tensorflow 2.5.0.
+This project requires Python 3.7 or 3.8. The models are neural
+networks coded in Tensorflow 2.5.0.
 
 Batuketa uses [poetry](https://python-poetry.org/) as a build tool and
 dependency manager. Poetry takes care of creating, maintaining, and
