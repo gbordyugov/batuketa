@@ -48,9 +48,9 @@ Evaluating the perfect model:
 ```
 
 In the above step, an attention-based model is trained for five epochs
-on training dataset, then it is evaluated against an eval dataset.
-Additional, the "perfect" model is evaluated on the same eval dataset
-for the sake of performance comparison.
+on the training dataset, then it is evaluated against the eval
+dataset. Additional, the "perfect" model is evaluated on the same eval
+dataset for the sake of performance comparison.
 
 The file
 [scripts/train_attention_model.py](scripts/train_attention_model.py)
@@ -63,8 +63,8 @@ performance of the model for different settings.
 
 ### The attention-based model
 
-As the main model I implemented a single-headed
-[attention](https://arxiv.org/abs/1706.03762)-based model. The main
+As the primary working model, I implemented a single-headed
+[attention](https://arxiv.org/abs/1706.03762)-based network. The main
 idea behind the attention technique is to let the model learn how to
 attend to different elements of the input sequence depending on their
 values.
@@ -94,8 +94,9 @@ discuss the details of the approach in person.
 I also implemented the "perfect" model, which is a non-trainable
 Tensorflow computational graph that calculates the desired sum of two
 elements by design. As it has zero trainable parameters, it's
-perfomance with the task is perfect (up to numerics). I use it as an
-ideal model to benchmark the attention-based model against.
+perfomance with the task is perfect (up to the numerical errors). I
+use it as an ideal model to benchmark the attention-based model
+against.
 
 
 ## Training and evaluation data
@@ -105,10 +106,11 @@ lazy generation of Tensorflow Datasets that are used for both training
 and model evaluation.
 
 
-## Quality assurance
+## Code quality assurance
 
 There are two independent Github Action build scripts in [the
-corresponding directory](.github/workflows).
+corresponding directory](.github/workflows) for Python versions 3.7
+and 3.8.
 
 To run unit tests, issue `poetry run pytest` (after you have installed
 the project along with its dependencies as described above).
