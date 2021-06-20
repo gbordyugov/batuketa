@@ -113,8 +113,8 @@ There are two independent Github Actions build scripts in [the
 corresponding directory](.github/workflows) for Python versions 3.7
 and 3.8.
 
-To run unit tests, issue `poetry run pytest` (after you have installed
-the project along with its dependencies as described above).
+To run the unit tests, issue `poetry run pytest` (after you have
+installed the project along with its dependencies as described above).
 
 The scripts in the [qa](qa/) directory perform formatting checks using
 the [black](https://github.com/psf/black) tool, import sorting with
