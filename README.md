@@ -46,15 +46,17 @@ Evaluating the attention-based model:
 Evaluating the perfect model:
 100/100 [==============================] - 0s 1ms/step - loss: 1.7936e-15
 ```
-1. In the above step, an attention-based model is trained for five
-   epochs on training dataset, then it is evaluated against an eval
-   dataset. Additional, the "perfect" model is evaluated on the same
-   eval dataset for the sake of performance comparison.
-1. The file
-   [scripts/train_attention_model.py](scripts/train_attention_model.py)
-   represents a short, user-friendly driver script with a few
-   hyperparameters that can be changed in order to evaluate the
-   performance of the model for different settings.
+
+In the above step, an attention-based model is trained for five epochs
+on training dataset, then it is evaluated against an eval dataset.
+Additional, the "perfect" model is evaluated on the same eval dataset
+for the sake of performance comparison.
+
+The file
+[scripts/train_attention_model.py](scripts/train_attention_model.py)
+represents a short, user-friendly driver script with a few
+hyperparameters that can be changed in order to evaluate the
+performance of the model for different settings.
 
 
 ## Choice of models
