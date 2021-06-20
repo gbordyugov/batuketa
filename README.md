@@ -53,6 +53,9 @@ on the training dataset, then it is evaluated against the eval
 dataset. Additionally, the "perfect" model is evaluated on the same
 eval dataset for the sake of performance comparison.
 
+The loss is the mean squared error between the prediction and the
+ground truth.
+
 The file
 [scripts/train_attention_model.py](scripts/train_attention_model.py)
 represents a short, user-friendly driver script with a few
@@ -99,6 +102,11 @@ perfomance with the task is perfect (up to the numerical errors). I
 use it as an ideal model to benchmark the attention-based model
 against.
 
+### The choice of loss
+
+For both models, I used the squared error between the ground truth and
+the predicted sum. The error is averaged across training samples in a
+batch.
 
 ## Training and evaluation data
 
