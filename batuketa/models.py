@@ -10,26 +10,10 @@ from batuketa.constants import mask_key
 from batuketa.constants import output_key
 
 
-def feed_forward_network(seq_len, d_model, dff):
-    """Create a point-wise feed-forward network consisting of two layers.
-
-    Args:
-      d_model: The dimension of the vocabulary embedding.
-      dff: The dimension of the hidden layer of the network.
-
-    Returns:
-      A keras model.
-    """
-
-    input = Input(shape=(seq_len, d_model))
-    x = Dense(dff, activation='relu')(input)
-    output = Dense(d_model)(x)
-
-    return Model(inputs=input, outputs=output)
-
-
 def create_history_mask(seq):
-    """Return history mask.
+    """Return history mask. This mask introduces the notion of "time"
+    along the input sequence by making the model blind to the values
+    in the future.
 
     Args:
       seq: (batch_size, seq_len)-shaped tf.int32 tensor
