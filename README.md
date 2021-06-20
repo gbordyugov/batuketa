@@ -109,7 +109,7 @@ and model evaluation.
 
 ## Code quality assurance
 
-There are two independent Github Action build scripts in [the
+There are two independent Github Actions build scripts in [the
 corresponding directory](.github/workflows) for Python versions 3.7
 and 3.8.
 
