@@ -47,7 +47,7 @@ def get_dataset(n_samples: int, seq_len: int) -> Dataset:
         output_signature=(
             {
                 input_key: tf.TensorSpec(shape=(seq_len,), dtype=tf.float32),
-                mask_key: tf.TensorSpec(shape=(seq_len,), dtype=tf.float32),
+                mask_key: tf.TensorSpec(shape=(seq_len,), dtype=tf.int32),
             },
             tf.TensorSpec(shape=(), dtype=tf.float32),
         ),

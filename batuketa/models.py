@@ -5,6 +5,10 @@ from tensorflow.keras.layers import Dropout  # pylint: disable=E0611
 from tensorflow.keras.layers import Input  # pylint: disable=E0611
 from tensorflow.keras.layers import Softmax  # pylint: disable=E0611
 
+from batuketa.constants import input_key
+from batuketa.constants import mask_key
+from batuketa.constants import output_key
+
 
 def feed_forward_network(seq_len, d_model, dff):
     """Create a point-wise feed-forward network consisting of two layers.
@@ -113,7 +117,6 @@ def mha(seq_len, d_model, num_heads):
     ), "The dimension of the model should be a multiple of num_heads."
 
     input = Input(shape=(seq_len, d_model), name='input')
-    mask = Input(shape=(seq_len, seq_len), name='mask')
 
     Q = Dense(d_model, name='Q')
     K = Dense(d_model, name='K')
@@ -130,8 +133,6 @@ def mha(seq_len, d_model, num_heads):
     _, _, seq_len, _ = tf.shape(qkt)
 
     na = tf.newaxis
-    infinity = 1.0e9
-    qkt = qkt - infinity * mask[:, na, :, :]
 
     weights = Softmax(axis=-1)(qkt)
 
@@ -139,7 +140,47 @@ def mha(seq_len, d_model, num_heads):
 
     output = merge_heads(output)
 
-    inputs = [input, mask]
+    inputs = [input]
     outputs = [q, k, v, qkt, output]
 
     return Model(inputs=inputs, outputs=outputs, name='mha')
+
+
+def attention_model(seq_len, num_heads):
+    """Create and return an attention-based summer model.
+
+    Arguments:
+      seq_len: int, the input sequence length,
+      num_heads: int, the number of heads for the multi-head attention
+        block.
+      ffn_dim: int, the size of the hidden layer of the feed-forward
+        sub-network of the multi-head attention-block.
+      dropout_rate: float.
+
+    Returns:
+      A Keras model with one (batch_size, seq_len)-shaped input and
+      (batch_size,)-shaped sum prediciton output.
+    """
+
+    input_ = Input(shape=(seq_len,), dtype=tf.float32, name=input_key)
+    mask_ = Input(shape=(seq_len,), dtype=tf.int32, name=mask_key)
+
+    input = input_[:,:, tf.newaxis]
+    mask = mask_[:,:, tf.newaxis]
+
+    mask = tf.cast(mask, tf.float32)
+
+    mha_input = tf.concat([input, mask], -1)
+
+    d_model = 2  # 1 for the numbers and 1 for the mask
+    multi_head_attention = mha(seq_len, d_model, num_heads)
+
+    _, _, _, _, mha_output = multi_head_attention(mha_input)
+
+    mha_output = tf.reshape(mha_output, (-1, d_model*seq_len))
+    sum = Dense(1, activation='relu', name='sum')(mha_output)
+
+    sum = tf.reshape(sum, (-1,))
+
+    inputs = [input_, mask_]
+    return Model(inputs=inputs, outputs=sum)
