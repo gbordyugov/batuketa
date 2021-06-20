@@ -19,7 +19,7 @@ automagically executed in this virtual environment.
 Those steps are needed to build and install the package, and to run a
 sample training/evalution script:
 
-1. Clone repository and `cd` into it.
+1. Clone the repository and `cd` into it.
 1. Make sure you've got the latest version of the `poetry` tool
    available in your Python installation, otherwise install it by
    issuing `pip install --upgrade poetry`.
@@ -50,8 +50,8 @@ Evaluating the perfect model:
 
 In the above step, an attention-based model is trained for five epochs
 on the training dataset, then it is evaluated against the eval
-dataset. Additional, the "perfect" model is evaluated on the same eval
-dataset for the sake of performance comparison.
+dataset. Additionally, the "perfect" model is evaluated on the same
+eval dataset for the sake of performance comparison.
 
 The file
 [scripts/train_attention_model.py](scripts/train_attention_model.py)
