@@ -2,8 +2,8 @@ from math import log
 
 import tensorflow as tf
 
-from batuketa.models import create_history_mask
 from batuketa.models import attention
+from batuketa.models import create_history_mask
 
 
 def test_create_history_mask():

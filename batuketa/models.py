@@ -105,8 +105,8 @@ def attention_model(seq_len):
     input_ = Input(shape=(seq_len,), dtype=tf.float32, name=input_key)
     mask_ = Input(shape=(seq_len,), dtype=tf.int32, name=mask_key)
 
-    input = input_[:,:, tf.newaxis]
-    mask = mask_[:,:, tf.newaxis]
+    input = input_[:, :, tf.newaxis]
+    mask = mask_[:, :, tf.newaxis]
 
     mask = tf.cast(mask, tf.float32)
 
@@ -119,7 +119,7 @@ def attention_model(seq_len):
 
     _, _, _, _, att_output = att([att_input, history_mask])
 
-    att_output = tf.reshape(att_output, (-1, d_model*seq_len))
+    att_output = tf.reshape(att_output, (-1, d_model * seq_len))
     sum = Dense(1, activation=None, name='sum')(att_output)
 
     sum = tf.reshape(sum, (-1,))
