@@ -43,6 +43,15 @@ Evaluating the attention-based model:
 Evaluating the perfect model:
 100/100 [==============================] - 0s 1ms/step - loss: 1.7936e-15
 ```
+1. In the above step, an attention-based model is trained for five
+   epochs on training dataset, then it is evaluated against an eval
+   dataset. Additional, the "perfect" model is evaluated on the same
+   eval dataset for the sake of performance comparison.
+1. The file
+   [scripts/train_attention_model.py](scripts/train_attention_model.py)
+   represents a short, user-friendly driver script with a few
+   hyperparameters that can be changed in order to evaluate the
+   performance of the model for different settings.
 
 
 ## Choice of models
@@ -82,3 +91,24 @@ Tensorflow computational graph that calculates the desired sum of two
 elements by design. As it has zero trainable parameters, it's
 perfomance with the task is perfect (up to numerics). I use it as an
 ideal model to benchmark the attention-based model against.
+
+
+## Training and evaluation data
+
+The file [batuketa/data.py](batuketa/data.py) contains the code for
+lazy generation of Tensorflow Datasets that are used for both training
+and model evaluation.
+
+
+## Quality assurance
+
+There are two independent Github Action build scripts in [the
+corresponding directory](.github/workflows).
+
+To run unit tests, issue `poetry run pytest` (after you have installed
+the project along with its dependencies as described above).
+
+The scripts in the [qa](qa/) directory perform formatting checks using
+the [black](https://github.com/psf/black) tool, import sorting with
+the help of [isort](https://github.com/PyCQA/isort), and static code
+analysis with the help of [pylint](https://www.pylint.org/).
