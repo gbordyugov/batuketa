@@ -1,3 +1,4 @@
+import tensorflow as tf
 from tensorflow.keras.callbacks import TensorBoard  # pylint: disable=E0611
 from tensorflow.keras.optimizers import Adam  # pylint: disable=E0611
 from tensorflow.keras.optimizers import SGD  # pylint: disable=E0611
@@ -33,15 +34,15 @@ att_model = attention_model(seq_len=seq_len)
 perf_model = perfect_model(seq_len=seq_len)
 
 opt = Adam(learning_rate=0.01)
-att_model.compile(loss='mean_squared_error', optimizer=opt)
-perf_model.compile(loss='mean_squared_error', optimizer=opt)
+att_model.compile(loss='mse', optimizer=opt)
+perf_model.compile(loss='mse', optimizer=opt)
 
 tensorboard_callback = TensorBoard(
-    log_dir=log_dir, histogram_freq=0, update_freq=10
+    log_dir=log_dir, histogram_freq=0, update_freq=1
 )
 
 print('Training the attention-based model:')
-att_model.fit(train_ds, epochs=n_epochs, callbacks=[tensorboard_callback], validation_data=eval_ds)
+att_model.fit(train_ds, epochs=n_epochs, callbacks=[tensorboard_callback])#, validation_data=eval_ds)
 
 
 print('Evaluating the attention-based model:')
