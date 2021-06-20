@@ -26,10 +26,13 @@ log_dir = 'logs/'
 train_ds = get_dataset(n_samples=train_n_samples, seq_len=seq_len).cache().shuffle(10*batch_size)
 train_ds = train_ds.batch(batch_size)
 
+eval_ds = get_dataset(n_samples=eval_n_samples, seq_len=seq_len).cache()
+eval_ds = eval_ds.batch(batch_size)
+
 att_model = attention_model(seq_len=seq_len)
 perf_model = perfect_model(seq_len=seq_len)
 
-opt = Adam(learning_rate=0.001)
+opt = Adam(learning_rate=0.01)
 att_model.compile(loss='mean_squared_error', optimizer=opt)
 perf_model.compile(loss='mean_squared_error', optimizer=opt)
 
@@ -38,10 +41,8 @@ tensorboard_callback = TensorBoard(
 )
 
 print('Training the attention-based model:')
-att_model.fit(train_ds, epochs=n_epochs, callbacks=[tensorboard_callback])
+att_model.fit(train_ds, epochs=n_epochs, callbacks=[tensorboard_callback], validation_data=eval_ds)
 
-eval_ds = get_dataset(n_samples=eval_n_samples, seq_len=seq_len).cache()
-eval_ds = eval_ds.batch(batch_size)
 
 print('Evaluating the attention-based model:')
 att_model.evaluate(eval_ds)
