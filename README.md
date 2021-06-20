@@ -19,7 +19,7 @@ automagically executed in this virtual environment.
 Those steps are needed to build and install the package, and to run a
 sample training/evalution script:
 
-1. Clone repository and `cd` into it.
+1. Clone the repository and `cd` into it.
 1. Make sure you've got the latest version of the `poetry` tool
    available in your Python installation, otherwise install it by
    issuing `pip install --upgrade poetry`.
@@ -50,8 +50,11 @@ Evaluating the perfect model:
 
 In the above step, an attention-based model is trained for five epochs
 on the training dataset, then it is evaluated against the eval
-dataset. Additional, the "perfect" model is evaluated on the same eval
-dataset for the sake of performance comparison.
+dataset. Additionally, the "perfect" model is evaluated on the same
+eval dataset for the sake of performance comparison.
+
+The loss is the mean squared error between the prediction and the
+ground truth.
 
 The file
 [scripts/train_attention_model.py](scripts/train_attention_model.py)
@@ -99,6 +102,11 @@ perfomance with the task is perfect (up to the numerical errors). I
 use it as an ideal model to benchmark the attention-based model
 against.
 
+### The choice of loss
+
+For both models, I used the squared error between the ground truth and
+the predicted sum. The error is averaged across training samples in a
+batch.
 
 ## Training and evaluation data
 
@@ -113,8 +121,8 @@ There are two independent Github Actions build scripts in [the
 corresponding directory](.github/workflows) for Python versions 3.7
 and 3.8.
 
-To run unit tests, issue `poetry run pytest` (after you have installed
-the project along with its dependencies as described above).
+To run the unit tests, issue `poetry run pytest` (after you have
+installed the project along with its dependencies as described above).
 
 The scripts in the [qa](qa/) directory perform formatting checks using
 the [black](https://github.com/psf/black) tool, import sorting with

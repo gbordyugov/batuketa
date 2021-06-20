@@ -16,7 +16,7 @@ def create_history_mask(seq):
     in the future.
 
     Args:
-      seq: (batch_size, seq_len)-shaped tf.int32 tensor
+      seq: (batch_size, seq_len)-shaped tf.int32 tensor.
 
     Returns:
       A (batch_size, seq_len, seq_len)-shaped tensor with elements
@@ -76,7 +76,7 @@ def attention_model(seq_len):
     """Create and return an attention-based summation model.
 
     Arguments:
-      seq_len: int, the input sequence length,
+      seq_len: int, the input sequence length.
 
     Returns:
       A Keras model with tww (batch_size, seq_len)-shaped inputs (one
@@ -115,7 +115,7 @@ def perfect_model(seq_len):
     trainable parameters.
 
     Arguments:
-      seq_len: int, the input sequence length,
+      seq_len: int, the input sequence length.
 
     Returns:
       A Keras model with two (batch_size, seq_len)-shaped inputs (one
