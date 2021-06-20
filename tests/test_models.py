@@ -3,7 +3,9 @@ from math import log
 import tensorflow as tf
 
 from batuketa.models import attention
+from batuketa.models import attention_model
 from batuketa.models import create_history_mask
+from batuketa.models import perfect_model
 
 
 def test_create_history_mask():
@@ -52,3 +54,41 @@ def test_attention():
     assert v.shape == qkv_shape
     assert qkt.shape == qkt_shape
     assert output.shape == input_shape
+
+
+def test_attention_model():
+    batch_size, seq_len = 32, 20
+
+    input_shape = (batch_size, seq_len)
+    mask_shape = (batch_size, seq_len)
+    output_shape = (batch_size,)
+
+    att_model = attention_model(seq_len)
+
+    input = tf.random.uniform(shape=input_shape, dtype=tf.float32)
+    mask = tf.random.uniform(  # pylint: disable=E1123
+        shape=mask_shape, minval=0, maxval=2, dtype=tf.int32
+    )
+
+    output = att_model([input, mask])
+
+    assert output.shape == output_shape
+
+
+def test_perfect_model():
+    batch_size, seq_len = 32, 20
+
+    input_shape = (batch_size, seq_len)
+    mask_shape = (batch_size, seq_len)
+    output_shape = (batch_size,)
+
+    perf_model = perfect_model(seq_len)
+
+    input = tf.random.uniform(shape=input_shape, dtype=tf.float32)
+    mask = tf.random.uniform(  # pylint: disable=E1123
+        shape=mask_shape, minval=0, maxval=2, dtype=tf.int32
+    )
+
+    output = perf_model([input, mask])
+
+    assert output.shape == output_shape
