@@ -55,10 +55,10 @@ def attention(seq_len, d_model):
 
     Returns:
       A Keras model with two inputs:
-        input: (batch_size, seq_len, d_model)-shaped tf.int32 tensor.
+        input: (batch_size, seq_len, d_model)-shaped tf.float32 tensor.
         mask: (batch_size, seq_len, seq_len)-shaped tf.int32 tensor.
       and one output:
-        output: (batch_size, seq_len, d_model)-shaped tf.float32 tensor.
+        output: (batch_size, d_model)-shaped tf.float32 tensor.
     """
 
     input = Input(shape=(seq_len, d_model), name='input')
@@ -93,12 +93,10 @@ def attention_model(seq_len):
 
     Arguments:
       seq_len: int, the input sequence length,
-      ffn_dim: int, the size of the hidden layer of the feed-forward
-        sub-network of the multi-head attention-block.
-      dropout_rate: float.
 
     Returns:
-      A Keras model with one (batch_size, seq_len)-shaped input and
+      A Keras model with tww (batch_size, seq_len)-shaped inputs (one
+      for the input sequence and one for the mask) and
       (batch_size,)-shaped sum prediciton output.
     """
 
