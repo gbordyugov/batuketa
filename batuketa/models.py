@@ -89,7 +89,7 @@ def attention(seq_len, d_model):
 
 
 def attention_model(seq_len):
-    """Create and return an attention-based summer model.
+    """Create and return an attention-based summation model.
 
     Arguments:
       seq_len: int, the input sequence length,
@@ -97,7 +97,7 @@ def attention_model(seq_len):
     Returns:
       A Keras model with tww (batch_size, seq_len)-shaped inputs (one
       for the input sequence and one for the mask) and
-      (batch_size,)-shaped sum prediciton output.
+      (batch_size,)-shaped sum prediction output.
     """
 
     input_ = Input(shape=(seq_len,), dtype=tf.float32, name=input_key)
@@ -123,4 +123,29 @@ def attention_model(seq_len):
     sum = tf.reshape(sum, (-1,))
 
     inputs = [input_, mask_]
+    return Model(inputs=inputs, outputs=sum)
+
+
+def perfect_model(seq_len):
+    """Create and return a perfect summation model. The model has zero
+    trainable parameters.
+
+    Arguments:
+      seq_len: int, the input sequence length,
+
+    Returns:
+      A Keras model with two (batch_size, seq_len)-shaped inputs (one
+      for the input sequence and one for the mask) and
+      (batch_size,)-shaped sum prediction output.
+    """
+
+    input = Input(shape=(seq_len,), dtype=tf.float32, name=input_key)
+    mask_ = Input(shape=(seq_len,), dtype=tf.int32, name=mask_key)
+
+    mask = tf.cast(mask_, tf.float32)
+
+    sum = tf.reduce_sum(mask * input, -1)
+
+    inputs = [input, mask_]
+
     return Model(inputs=inputs, outputs=sum)
