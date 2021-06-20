@@ -46,63 +46,12 @@ def create_history_mask(seq):
     return mask[tf.newaxis, :, :]
 
 
-def split_heads(u, num_heads):
-    """Split sequence u into num_heads heads.
-
-    Arguments:
-      u: (batch_size, seq_len, d_model)-shaped input sequence.
-      num_heads: number of heads. d_model should be a multiple of
-      num_heads.
-
-    Returns:
-      (batch_size, num_heads, seq_len, d_model_per_head)-shaped
-      tensor, where d_model_per_head = d_model // num_heads.
-    """
-
-    batch_size, seq_len, d_model = tf.shape(u)
-    d_model_per_head = d_model // num_heads
-
-    shape = tf.stack([batch_size, seq_len, num_heads, d_model_per_head])
-    u = tf.reshape(u, shape)
-
-    perm = [0, 2, 1, 3]
-    u = tf.transpose(u, perm)
-
-    return u
-
-
-def merge_heads(u):
-    """Merge multi-headed sequence u into a single-headed one.
-
-    Arguments:
-      u: (batch_size, num_heads, seq_len, d_model_per_head)-shaped
-      input sequence.
-
-    Returns:
-      (batch_size, seq_len, d_model)-shaped tensor, where d_model =
-      d_model_per_head * num_heads.
-    """
-
-    batch_size, num_heads, seq_len, d_model_per_head = tf.shape(u)
-    d_model = d_model_per_head * num_heads
-
-    perm = [0, 2, 1, 3]
-    u = tf.transpose(u, perm)
-
-    shape = tf.stack([batch_size, seq_len, d_model])
-    u = tf.reshape(u, shape)
-
-    return u
-
-
-def mha(seq_len, d_model, num_heads):
-    """Crete and returna multi-head attention block.
+def attention(seq_len, d_model):
+    """Create and return a single-head attention block.
 
     Arguments:
       seq_len: int, the number of items in the input sequence.
       d_model: int, the dimension of the the single item representation.
-      hum_heads: int, the number of heads. Note that d_model should be
-        a multiple of num_heads.
 
     Returns:
       A Keras model with two inputs:
@@ -112,47 +61,38 @@ def mha(seq_len, d_model, num_heads):
         output: (batch_size, seq_len, d_model)-shaped tf.float32 tensor.
     """
 
-    assert (
-        d_model % num_heads == 0
-    ), "The dimension of the model should be a multiple of num_heads."
-
     input = Input(shape=(seq_len, d_model), name='input')
+    mask = Input(shape=(seq_len, seq_len), name='mask')
 
     Q = Dense(d_model, name='Q')
     K = Dense(d_model, name='K')
     V = Dense(d_model, name='V')
 
-    q = split_heads(Q(input), num_heads)
-    k = split_heads(K(input), num_heads)
-    v = split_heads(V(input), num_heads)
+    q = Q(input)
+    k = K(input)
+    v = V(input)
 
     qkt = tf.matmul(q, k, transpose_b=True)
     dk = tf.cast(tf.shape(k)[-1], tf.float32)
     qkt = qkt / tf.math.sqrt(dk)
 
-    _, _, seq_len, _ = tf.shape(qkt)
-
-    na = tf.newaxis
+    infinity = 1.0e9
+    qkt = qkt - infinity * mask
 
     weights = Softmax(axis=-1)(qkt)
-
     output = tf.matmul(weights, v)
 
-    output = merge_heads(output)
-
-    inputs = [input]
+    inputs = [input, mask]
     outputs = [q, k, v, qkt, output]
 
     return Model(inputs=inputs, outputs=outputs, name='mha')
 
 
-def attention_model(seq_len, num_heads):
+def attention_model(seq_len):
     """Create and return an attention-based summer model.
 
     Arguments:
       seq_len: int, the input sequence length,
-      num_heads: int, the number of heads for the multi-head attention
-        block.
       ffn_dim: int, the size of the hidden layer of the feed-forward
         sub-network of the multi-head attention-block.
       dropout_rate: float.
@@ -170,15 +110,17 @@ def attention_model(seq_len, num_heads):
 
     mask = tf.cast(mask, tf.float32)
 
-    mha_input = tf.concat([input, mask], -1)
+    att_input = tf.concat([input, mask], -1)
 
     d_model = 2  # 1 for the numbers and 1 for the mask
-    multi_head_attention = mha(seq_len, d_model, num_heads)
+    att = attention(seq_len, d_model)
 
-    _, _, _, _, mha_output = multi_head_attention(mha_input)
+    history_mask = create_history_mask(input_)
 
-    mha_output = tf.reshape(mha_output, (-1, d_model*seq_len))
-    sum = Dense(1, activation='relu', name='sum')(mha_output)
+    _, _, _, _, att_output = att([att_input, history_mask])
+
+    att_output = tf.reshape(att_output, (-1, d_model*seq_len))
+    sum = Dense(1, activation=None, name='sum')(att_output)
 
     sum = tf.reshape(sum, (-1,))
 

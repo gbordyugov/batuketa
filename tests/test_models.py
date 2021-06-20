@@ -3,59 +3,49 @@ from math import log
 import tensorflow as tf
 
 from batuketa.models import create_history_mask
-from batuketa.models import feed_forward_network
-from batuketa.models import merge_heads
-from batuketa.models import mha
-from batuketa.models import split_heads
+from batuketa.models import attention
 
 
-def test_split_heads():
-    num_heads = 2
+def test_create_history_mask():
+    seq_len = 5
+
+    seq = tf.range(seq_len)[tf.newaxis, :]
+
+    mask = create_history_mask(seq)
+
+    expected_mask = tf.constant(
+        [
+            [
+                [0.0, 1.0, 1.0, 1.0, 1.0],
+                [0.0, 0.0, 1.0, 1.0, 1.0],
+                [0.0, 0.0, 0.0, 1.0, 1.0],
+                [0.0, 0.0, 0.0, 0.0, 1.0],
+                [0.0, 0.0, 0.0, 0.0, 0.0],
+            ],
+        ]
+    )
+
+    assert mask.shape == expected_mask.shape
+    tf.debugging.assert_equal(mask, expected_mask)
+
+
+def test_attention():
     batch_size, seq_len, d_model = 32, 20, 16
-    d_model_per_head = d_model // num_heads
-
-    input_shape = (batch_size, num_heads, seq_len, d_model_per_head)
-    output_shape = (batch_size, seq_len, d_model)
-
-    x = tf.random.uniform(shape=input_shape, dtype=tf.float32)
-    y = merge_heads(x)
-
-    assert y.shape == output_shape
-
-
-def test_merge_heads():
-    num_heads = 2
-    batch_size, seq_len, d_model = 32, 20, 16
-    d_model_per_head = d_model // num_heads
-
-    input_shape = (batch_size, seq_len, d_model)
-    output_shape = (batch_size, num_heads, seq_len, d_model_per_head)
-
-    x = tf.random.uniform(shape=input_shape, dtype=tf.float32)
-    y = split_heads(x, num_heads)
-
-    assert y.shape == output_shape
-
-
-def test_mha():
-    num_heads = 2
-    batch_size, seq_len, d_model = 32, 20, 16
-    d_model_per_head = d_model // num_heads
 
     input_shape = (batch_size, seq_len, d_model)
     mask_shape = (batch_size, seq_len, seq_len)
 
-    attention = mha(seq_len, d_model, num_heads)
+    att = attention(seq_len, d_model)
 
     input = tf.random.uniform(shape=input_shape, dtype=tf.float32)
     mask = tf.random.uniform(  # pylint: disable=E1123
         shape=mask_shape, minval=0, maxval=2, dtype=tf.int32
     )
 
-    q, k, v, qkt, output = attention([input, mask])
+    q, k, v, qkt, output = att([input, mask])
 
-    qkv_shape = (batch_size, num_heads, seq_len, d_model_per_head)
-    qkt_shape = (batch_size, num_heads, seq_len, seq_len)
+    qkv_shape = (batch_size, seq_len, d_model)
+    qkt_shape = (batch_size, seq_len, seq_len)
 
     assert q.shape == qkv_shape
     assert k.shape == qkv_shape
