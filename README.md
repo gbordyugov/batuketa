@@ -12,9 +12,11 @@ Batuketa uses [poetry](https://python-poetry.org/) as a build tool and
 dependency manager. Poetry takes care of creating, maintaining, and
 activating/deactivating a dedicated virtual environment for the
 project without you having to do it. Once the virtual environment has
-been created by poetry on a first run of `poetry install`, any command
-prefixed by "poetry run" will be automagically executed in this
-virtual environment.
+been created by poetry (which typicall happens on a first run of
+`poetry install`), any command prefixed by "poetry run" will be
+automagically executed in this virtual environment.
+
+Those steps are needed to build and install the package:
 
 1. Clone repository and `cd` into it.
 1. Make sure you've got `poetry` tool available in your Python
