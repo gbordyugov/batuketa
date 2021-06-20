@@ -7,9 +7,9 @@ from batuketa.data import get_dataset
 
 def test_get_dataset():
     n_samples = 1000
-    sample_length = 400
+    seq_len = 400
 
-    ds = list(get_dataset(n_samples, sample_length))
+    ds = list(get_dataset(n_samples, seq_len))
 
     assert len(ds) == n_samples
 
@@ -19,8 +19,8 @@ def test_get_dataset():
         input = inputs[input_key]
         mask = inputs[mask_key]
 
-        assert input.shape == (sample_length,)
-        assert mask.shape == (sample_length,)
+        assert input.shape == (seq_len,)
+        assert mask.shape == (seq_len,)
         assert target.shape == ()
 
         assert set(mask.numpy()) == one_and_zero

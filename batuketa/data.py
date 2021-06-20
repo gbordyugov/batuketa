@@ -9,17 +9,29 @@ from batuketa.constants import input_key
 from batuketa.constants import mask_key
 
 
-def get_dataset(n_samples: int, sample_length: int) -> Dataset:
-    indices = arange(sample_length)
+def get_dataset(n_samples: int, seq_len: int) -> Dataset:
+    """Get train/test dataset with `n_sample` samples, each having
+    `seq_len` elements.
+
+    Arguments:
+      n_samples: int, number of samples.
+      seq_len: int, length of sequence.
+
+    Returns:
+      Dataset yielding tuples. The first element of each tuple is a
+      dictionary with keys 'input' and 'mask', and the second element
+      is the sum of the masked elements of 'input'.
+    """
+    indices = arange(seq_len)
 
     def generator():
         for _ in range(n_samples):
-            input = random(sample_length)
+            input = random(seq_len)
             non_zeros = choice(indices, 2, replace=False)
 
             sum = input[non_zeros].sum()
 
-            mask = zeros(sample_length)
+            mask = zeros(seq_len)
             mask[non_zeros] += 1.0
 
             yield (
@@ -34,12 +46,8 @@ def get_dataset(n_samples: int, sample_length: int) -> Dataset:
         generator=generator,
         output_signature=(
             {
-                input_key: tf.TensorSpec(
-                    shape=(sample_length,), dtype=tf.float32
-                ),
-                mask_key: tf.TensorSpec(
-                    shape=(sample_length,), dtype=tf.float32
-                ),
+                input_key: tf.TensorSpec(shape=(seq_len,), dtype=tf.float32),
+                mask_key: tf.TensorSpec(shape=(seq_len,), dtype=tf.float32),
             },
             tf.TensorSpec(shape=(), dtype=tf.float32),
         ),
