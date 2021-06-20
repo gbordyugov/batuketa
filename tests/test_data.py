@@ -30,4 +30,8 @@ def test_get_dataset():
         target = target.numpy()
 
         assert mask.sum() == 2.0
+        assert input.min() >= 0.0
+        assert input.min() < 1.0
+        assert input.max() >= 0.0
+        assert input.max() < 1.0
         assert (input * mask).sum() == approx(target)
