@@ -89,10 +89,10 @@ The figures below represent the dynamics of the epoch training loss
 over ten training epochs for sequence length equal to 100, 200, 300,
 and 400:
 
-![100](figures/loss-seq-len-100.png)
-![200](figures/loss-seq-len-200.png)
-![300](figures/loss-seq-len-300.png)
-![400](figures/loss-seq-len-400.png)
+<img src="figures/loss-seq-len-100.png" width=350 />
+<img src="figures/loss-seq-len-200.png" width=350 />
+<img src="figures/loss-seq-len-300.png" width=350 />
+<img src="figures/loss-seq-len-400.png" width=350 />
 
 Note that despite somewhat noisy loss behaviour in the late training
 epochs, those losses are extremely good as initially the randomly
