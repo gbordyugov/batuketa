@@ -99,6 +99,15 @@ epochs, those losses are extremely good as initially the randomly
 initialised weights result in losses of the order of magnitude of
 `1.0e0`.
 
+
+### Training data set should be scaled up with increasing input length
+
+For an input of length `T`, there are `Tx(T-1)/2` possible different
+input masks. Thus, the detoriated training performance of this other
+models can be perfectly explained by using the fixed size training set
+(100,000 training samples, as discussed in the paper).
+
+
 ## Choice of models
 
 ### The attention-based model
