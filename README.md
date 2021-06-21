@@ -95,9 +95,9 @@ and 400:
 <img src="figures/loss-seq-len-400.png" width=320 />
 
 Note that despite somewhat noisy loss behaviour in the late training
-epochs, those losses are extremely good as initially the randomly
-initialised weights result in losses of the order of magnitude of
-`1.0e0`.
+epochs, those losses are still extremely good as initially the
+randomly initialised weights result in losses of the order of
+magnitude of `1.0e0`.
 
 
 ### Training data set should be scaled up with increasing input length
