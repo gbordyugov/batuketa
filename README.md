@@ -11,13 +11,13 @@ networks coded in Tensorflow 2.5.0.
 Batuketa uses [poetry](https://python-poetry.org/) as a build tool and
 dependency manager. Poetry takes care of creating, maintaining, and
 activating/deactivating a dedicated virtual environment for the
-project without you having to do it. Once the virtual environment has
-been created by poetry (which typicall happens on a first run of
-`poetry install`), any command prefixed by "poetry run" will be
-automagically executed in this virtual environment.
+project without you having to do it explicitly. Once the virtual
+environment has been created by poetry (which typicall happens on a
+first run of `poetry install`), any command prefixed by `poetry run`
+will be automagically executed in this virtual environment. There is
+no need to activate or deactivate the virtual environment explicitly.
 
-Those steps are needed to build and install the package, and to run a
-sample training/evalution script:
+Those steps are needed to build and install the package:
 
 1. Clone the repository and `cd` into it.
 1. Make sure you've got the latest version of the `poetry` tool
@@ -28,7 +28,7 @@ sample training/evalution script:
    the cloned git repository of the project).
 1. Run unit tests by issuing `poetry run pytest`.
 
-## Running the code
+## Running the training code
 
 Run model training and evaluation by issuing `poetry run python
 scripts/train_attention_model.py`. A typical output would look like
@@ -65,7 +65,8 @@ Evaluating the perfect model:
 In the above step, an attention-based model is trained for ten epochs
 on the training dataset, then it is evaluated against the eval
 dataset. Additionally, the "perfect" model is evaluated on the same
-eval dataset for the sake of performance comparison.
+eval dataset for the sake of performance comparison (see below for the
+details of model description).
 
 The loss is the mean squared error between the prediction and the
 ground truth.
@@ -120,9 +121,9 @@ values.
 
 A crucial intermediate product of the attention architecture is a
 square attention matrix of the size given by the sequence length. This
-attention matrix encodes the relative importance of the i-th element
-of the sequence to the j-th one for all i, j from zero to sequence
-length.
+attention matrix encodes the relative importance of the `i`-th element
+of the sequence to the `j`-th one for all `i`, `j` from zero to
+sequence length.
 
 Another important component of the attention-based model is the
 so-called history mask. This attention masks makes sure that, for each
@@ -138,7 +139,7 @@ paper](https://arxiv.org/abs/1706.03762). I would be also glad to
 discuss the details of the approach in person.
 
 
-### The pefect model
+### The "perfect" model
 
 I also implemented the "perfect" model, which is a non-trainable
 Tensorflow computational graph that calculates the desired sum of two
@@ -147,11 +148,12 @@ perfomance with the task is perfect (up to the numerical errors). I
 use it as an ideal model to benchmark the attention-based model
 against.
 
+
 ### The choice of loss
 
 For both models, I used the squared error between the ground truth and
-the predicted sum. The error is averaged across training samples in a
-batch.
+the predicted sum.
+
 
 ## Training and evaluation data
 
