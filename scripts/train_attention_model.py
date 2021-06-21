@@ -1,12 +1,11 @@
 import tensorflow as tf
 from tensorflow.keras.callbacks import TensorBoard  # pylint: disable=E0611
 from tensorflow.keras.optimizers import Adam  # pylint: disable=E0611
-from tensorflow.keras.optimizers import SGD  # pylint: disable=E0611
-from tensorflow.keras.optimizers import RMSprop  # pylint: disable=E0611
 
 from batuketa.data import get_dataset
 from batuketa.models import attention_model
 from batuketa.models import perfect_model
+
 
 # Length of the input sequence
 seq_len = 100
@@ -37,12 +36,10 @@ opt = Adam(learning_rate=0.01)
 att_model.compile(loss='mse', optimizer=opt)
 perf_model.compile(loss='mse', optimizer=opt)
 
-tensorboard_callback = TensorBoard(
-    log_dir=log_dir, histogram_freq=0, update_freq=1
-)
+tensorboard_callback = TensorBoard(log_dir=log_dir)
 
 print('Training the attention-based model:')
-att_model.fit(train_ds, epochs=n_epochs, callbacks=[tensorboard_callback])#, validation_data=eval_ds)
+att_model.fit(train_ds, epochs=n_epochs, callbacks=[tensorboard_callback])
 
 
 print('Evaluating the attention-based model:')

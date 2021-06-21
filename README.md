@@ -3,7 +3,7 @@
 ![build status](https://github.com/gbordyugov/batuketa/actions/workflows/build-3.7.yml/badge.svg)
 ![build status](https://github.com/gbordyugov/batuketa/actions/workflows/build-3.8.yml/badge.svg)
 
-## Installing and running the code
+## Installing the package
 
 This project requires Python 3.7 or 3.8. The models are neural
 networks coded in Tensorflow 2.5.0.
@@ -27,28 +27,42 @@ sample training/evalution script:
    by issuing `poetry install` (make sure you're in the directory with
    the cloned git repository of the project).
 1. Run unit tests by issuing `poetry run pytest`.
-1. Run model training and evaluation by issuing `poetry run python
-   scripts/train_attention_model.py`. A typical output would look like
+
+## Running the code
+
+Run model training and evaluation by issuing `poetry run python
+scripts/train_attention_model.py`. A typical output would look like
+
 ```bash
 ➜  batuketa git:(master) ✗ poetry run python scripts/train_attention_model.py
 Training the attention-based model:
-Epoch 1/5
-1000/1000 [==============================] - 48s 48ms/step - loss: 0.0304
-Epoch 2/5
-1000/1000 [==============================] - 17s 17ms/step - loss: 0.0010
-Epoch 3/5
-1000/1000 [==============================] - 17s 17ms/step - loss: 3.2781e-04
-Epoch 4/5
-1000/1000 [==============================] - 21s 21ms/step - loss: 1.5733e-04
-Epoch 5/5
-1000/1000 [==============================] - 17s 17ms/step - loss: 1.0748e-04
+Epoch 1/10
+1000/1000 [==============================] - 24s 23ms/step - loss: 0.0881
+Epoch 2/10
+1000/1000 [==============================] - 9s 9ms/step - loss: 0.0018
+Epoch 3/10
+1000/1000 [==============================] - 9s 9ms/step - loss: 5.4623e-04
+Epoch 4/10
+1000/1000 [==============================] - 8s 8ms/step - loss: 2.0604e-04
+Epoch 5/10
+1000/1000 [==============================] - 9s 9ms/step - loss: 1.3697e-04
+Epoch 6/10
+1000/1000 [==============================] - 9s 9ms/step - loss: 7.1329e-05
+Epoch 7/10
+1000/1000 [==============================] - 9s 9ms/step - loss: 8.8166e-05
+Epoch 8/10
+1000/1000 [==============================] - 9s 9ms/step - loss: 1.5731e-04
+Epoch 9/10
+1000/1000 [==============================] - 9s 9ms/step - loss: 1.3176e-04
+Epoch 10/10
+1000/1000 [==============================] - 9s 9ms/step - loss: 6.5662e-05
 Evaluating the attention-based model:
-100/100 [==============================] - 5s 48ms/step - loss: 4.3330e-06
+100/100 [==============================] - 2s 20ms/step - loss: 2.7954e-05
 Evaluating the perfect model:
-100/100 [==============================] - 0s 1ms/step - loss: 1.7936e-15
+100/100 [==============================] - 0s 616us/step - loss: 1.7770e-15
 ```
 
-In the above step, an attention-based model is trained for five epochs
+In the above step, an attention-based model is trained for ten epochs
 on the training dataset, then it is evaluated against the eval
 dataset. Additionally, the "perfect" model is evaluated on the same
 eval dataset for the sake of performance comparison.
@@ -62,6 +76,28 @@ represents a short, user-friendly driver script with a few
 hyperparameters that can be changed in order to evaluate the
 performance of the model for different settings.
 
+The training script outputs training statistics to the directory
+`logs/` in the [Tensorboard](https://www.tensorflow.org/tensorboard)
+format. You can start Tensorboard serving this data by running `poetry
+run tensorboard --logdir logs` and by pointing your browser to the
+shown address (typically, `http://localhost:6006/`).
+
+
+## Performance of the model for different sequence lengths
+
+The figures below represent the dynamics of the epoch training loss
+over ten training epochs for sequence length equal to 100, 200, 300,
+and 400:
+
+![100](figures/loss-seq-len-100.png)
+![200](figures/loss-seq-len-200.png)
+![300](figures/loss-seq-len-300.png)
+![400](figures/loss-seq-len-400.png)
+
+Note that despite somewhat noisy loss behaviour in the late training
+epochs, those losses are extremely good as initially the randomly
+initialised weights result in losses of the order of magnitude of
+`1.0e0`.
 
 ## Choice of models
 
