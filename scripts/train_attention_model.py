@@ -6,7 +6,6 @@ from batuketa.data import get_dataset
 from batuketa.models import attention_model
 from batuketa.models import perfect_model
 
-
 # Length of the input sequence
 seq_len = 100
 
@@ -23,7 +22,11 @@ n_epochs = 10
 # TensorBoard logs
 log_dir = 'logs/'
 
-train_ds = get_dataset(n_samples=train_n_samples, seq_len=seq_len).cache().shuffle(10*batch_size)
+train_ds = (
+    get_dataset(n_samples=train_n_samples, seq_len=seq_len)
+    .cache()
+    .shuffle(10 * batch_size)
+)
 train_ds = train_ds.batch(batch_size)
 
 eval_ds = get_dataset(n_samples=eval_n_samples, seq_len=seq_len).cache()
